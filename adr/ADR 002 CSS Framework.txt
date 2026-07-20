@@ -1,0 +1,44 @@
+=====================================================================
+ADR-002: CSS Framework
+=====================================================================
+
+Status: Accepted
+Date: July 19, 2026
+
+Context
+-------
+The project requires a CSS framework to ensure consistent styling throughout
+the application. Bootstrap has been specified by the client.
+
+Decision
+--------
+The application will use Bootstrap as its CSS framework.
+
+Rationale
+---------
+- Bootstrap is client mandated.
+- Team members are already familiar with Bootstrap.
+- Provides reusable styles and components.
+- Well documented and easy to troubleshoot.
+
+Alternatives Considered
+-----------------------
+Tailwind CSS
+- Not specified by the client.
+
+Custom CSS
+- Requires more development time.
+- Increases the risk of inconsistent styling.
+
+Consequences
+------------
+
+Positive
+- Meets client requirements.
+- Consistent appearance throughout the application.
+- Reduces manual CSS development.
+- Team familiarity speeds development.
+
+Negative
+- Requires overriding default styles for extensive customization.
+- May include unused styles, increasing application size.
