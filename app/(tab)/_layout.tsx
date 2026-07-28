@@ -1,9 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { theme } from "../../styles/theme";
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: theme.colors.colorText,
+        tabBarInactiveTintColor: theme.colors.colorTextMuted,
+        tabBarStyle: {
+          height: "10%",
+          paddingTop: 15,
+          paddingLeft: 10,
+          paddingRight: 10,
+        },
+      }}
+    >
       <Tabs.Screen
         name="dashboard"
         options={{
@@ -23,7 +36,7 @@ export default function TabLayout() {
           title: "Transactions",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "book" : "book-outline"}
+              name={focused ? "cash" : "cash-outline"}
               size={size}
               color={color}
             />
@@ -36,7 +49,7 @@ export default function TabLayout() {
           title: "Account",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "settings" : "settings-outline"}
+              name={focused ? "aperture" : "aperture-outline"}
               size={size}
               color={color}
             />
@@ -49,7 +62,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "settings" : "settings-outline"}
+              name={focused ? "person" : "person-outline"}
               size={size}
               color={color}
             />
