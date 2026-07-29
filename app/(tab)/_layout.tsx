@@ -1,12 +1,35 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import Header from "../../components/Header";
 import { theme } from "../../styles/theme";
 
 export default function TabLayout() {
   return (
     <Tabs
-      screenOptions={{
-        headerShown: false,
+      screenOptions={({ route }) => ({
+        header: () => (
+          <Header
+            headerInfo={{
+              title:
+                {
+                  "dashboard/index": "Dashboard",
+                  "transactions/index": "Transactions",
+                  "account/index": "Account",
+                  "profile/index": "Profile",
+                }[route.name] ?? "Page",
+
+              subtitle:
+                {
+                  "dashboard/index": "OVERVIEW",
+                  "transactions/index": "MANAGE",
+                  "account/index": "MANAGE",
+                  "profile/index": "PROFILE",
+                }[route.name] ?? "PAGE",
+              //intials to KD for testing
+              initials: "KD",
+            }}
+          />
+        ),
         tabBarActiveTintColor: theme.colors.colorText,
         tabBarInactiveTintColor: theme.colors.colorTextMuted,
         tabBarStyle: {
@@ -15,7 +38,7 @@ export default function TabLayout() {
           paddingLeft: 10,
           paddingRight: 10,
         },
-      }}
+      })}
     >
       <Tabs.Screen
         name="dashboard"
@@ -30,6 +53,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="transactions"
         options={{
@@ -43,6 +67,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="account"
         options={{
@@ -56,6 +81,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="profile"
         options={{

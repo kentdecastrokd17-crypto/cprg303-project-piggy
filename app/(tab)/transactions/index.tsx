@@ -56,5 +56,7 @@ const styles = StyleSheet.create({
   },
   addTransactionButtonText: {
     fontSize: 50,
+    paddingBottom: 10,
+    color: "#ffffff",
   },
 });
