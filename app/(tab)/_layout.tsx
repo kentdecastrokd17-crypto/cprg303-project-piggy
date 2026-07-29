@@ -1,9 +1,23 @@
+"use client";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import Header from "../../components/Header";
 import { theme } from "../../styles/theme";
 
 export default function TabLayout() {
+  //retrieve time for hello message
+  function getGreeting() {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      return "GOOD MORNING";
+    } else if (hour < 18) {
+      return "GOOD AFTERNOON";
+    } else {
+      return "GOOD EVENING";
+    }
+  }
+
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -12,18 +26,18 @@ export default function TabLayout() {
             headerInfo={{
               title:
                 {
-                  "dashboard/index": "Dashboard",
-                  "transactions/index": "Transactions",
-                  "account/index": "Account",
-                  "profile/index": "Profile",
+                  "dashboard/index": getGreeting(),
+                  "transactions/index": "ALL ACTIVITY",
+                  "account/index": "YOUR STANDING",
+                  "profile/index": "MANAGE",
                 }[route.name] ?? "Page",
 
               subtitle:
                 {
-                  "dashboard/index": "OVERVIEW",
-                  "transactions/index": "MANAGE",
-                  "account/index": "MANAGE",
-                  "profile/index": "PROFILE",
+                  "dashboard/index": "Kent",
+                  "transactions/index": "Transactions",
+                  "account/index": "Financial Profile",
+                  "profile/index": "Account",
                 }[route.name] ?? "PAGE",
               //intials to KD for testing
               initials: "KD",
