@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const transactionSchema = z.object({
-  type: z.enum(["expense", "income"]),
+  expenseOrIncome: z.enum(["expense", "income"]),
 
   amount: z.number().positive("Amount must be greater than 0"),
 
-  category: z.enum([
+  type: z.enum([
     "Food",
     "Transport",
     "Bills",
