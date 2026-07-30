@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     height: 40,
     flexDirection: "row",
     borderRadius: 20,
+    marginBottom: 20,
   },
   expenseIncomeInnerContainer: {
     width: "50%",
@@ -79,4 +80,5 @@ const styles = StyleSheet.create({
   expenseIncomeSelectedText: {
     color: theme.colors.colorSurface,
   },
+  amountContainer: {},
 });
