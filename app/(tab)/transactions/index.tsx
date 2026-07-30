@@ -1,4 +1,5 @@
 "use client";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -166,7 +167,10 @@ const index = () => {
           renderItem={({ item }) => <TransactionCard transaction={item} />}
         />
       </View>
-      <Pressable style={styles.addTransactionButtonContainer}>
+      <Pressable
+        style={styles.addTransactionButtonContainer}
+        onPress={() => router.push("/transactions/new")}
+      >
         <Text style={styles.addTransactionButtonText}>+</Text>
       </Pressable>
     </View>
