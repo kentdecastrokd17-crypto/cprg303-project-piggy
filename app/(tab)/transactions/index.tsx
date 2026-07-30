@@ -178,6 +178,7 @@ export default index;
 const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 10,
+    backgroundColor: theme.colors.colorBg,
   },
   transactionBarContainer: {
     height: 50,

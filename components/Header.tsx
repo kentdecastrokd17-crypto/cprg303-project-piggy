@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     padding: 20,
-
+    backgroundColor: theme.colors.colorBg,
     justifyContent: "space-between",
   },
   headerTitleContainer: {
