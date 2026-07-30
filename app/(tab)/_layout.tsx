@@ -21,6 +21,9 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={({ route }) => ({
+        sceneStyle: {
+          backgroundColor: theme.colors.colorBg,
+        },
         header: () => (
           <Header
             headerInfo={{
