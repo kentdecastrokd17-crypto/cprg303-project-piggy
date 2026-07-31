@@ -1,9 +1,23 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import AmountEntry from "../../../components/AmountEntry";
+import { TransactionFormData, transactionSchema } from "../../../lib/schema";
 import { theme } from "../../../styles/theme";
 
 const AddTransaction = () => {
   const [expenseIncome, setExpenseIncome] = useState("expense");
+  const { control, handleSubmit } = useForm<TransactionFormData>({
+    resolver: zodResolver(transactionSchema),
+    defaultValues: {
+      expenseOrIncome: "expense",
+      amount: 0,
+      type: "Food",
+      date: new Date().toISOString(),
+      note: "",
+    },
+  });
   return (
     <View style={styles.contentContainer}>
       <View style={styles.expenseIncomeContainer}>
@@ -40,6 +54,7 @@ const AddTransaction = () => {
           </Text>
         </Pressable>
       </View>
+      <AmountEntry />
     </View>
   );
 };
@@ -80,5 +95,7 @@ const styles = StyleSheet.create({
   expenseIncomeSelectedText: {
     color: theme.colors.colorSurface,
   },
-  amountContainer: {},
+  amountContainer: {
+    width: "100%",
+  },
 });
