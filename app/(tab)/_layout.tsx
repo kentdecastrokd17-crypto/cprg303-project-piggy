@@ -30,7 +30,7 @@ export default function TabLayout() {
               title:
                 {
                   "dashboard/index": getGreeting(),
-                  "transactions/index": "ALL ACTIVITY",
+                  transactions: "ALL ACTIVITY",
                   "account/index": "YOUR STANDING",
                   "profile/index": "MANAGE",
                 }[route.name] ?? "Page",
@@ -38,7 +38,7 @@ export default function TabLayout() {
               subtitle:
                 {
                   "dashboard/index": "Kent",
-                  "transactions/index": "Transactions",
+                  transactions: "Transactions",
                   "account/index": "Financial Profile",
                   "profile/index": "Account",
                 }[route.name] ?? "PAGE",
