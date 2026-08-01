@@ -37,11 +37,12 @@ const Transactions = () => {
   );
   //filtering the list of transactions so selected month is considered
   const filteredTransactions = transactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.date);
+    const [transactionYear, transactionMonth] = transaction.date
+      .split("-")
+      .map(Number);
 
     const matchesDate =
-      transactionDate.getFullYear() === year &&
-      transactionDate.getMonth() === month;
+      transactionYear === year && transactionMonth - 1 === month;
 
     const matchesType =
       selectedType === "All" || transaction.type === selectedType;

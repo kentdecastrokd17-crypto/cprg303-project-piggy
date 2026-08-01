@@ -7,14 +7,23 @@ import { Transaction } from "../lib/storage";
 type Props = {
   transaction: Transaction;
 };
-
+const transactionIcons = {
+  Food: "restaurant-outline",
+  Transport: "bus-outline",
+  Bills: "receipt-outline",
+  Fun: "film-outline",
+  Housing: "home-outline",
+  Health: "heart-outline",
+  Income: "briefcase-outline",
+  Other: "ellipsis-horizontal-outline",
+} as const;
 export default function TransactionCard({ transaction }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.cardTypeIconContainer}>
         {/*airplane is just for test*/}
         <Ionicons
-          name="airplane-outline"
+          name={transactionIcons[transaction.type]}
           size={20}
           color={theme.colors.colorTextMuted}
         />
