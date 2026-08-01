@@ -1,26 +1,37 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Typed Key names to prevent typos
+const TRANSACTIONS_KEY = "transactions";
 
-export const STORAGE_KEYS = {
-  TRANSACTIONS: "transactions",
-} as const;
-
-// Get a value from storage (automatically parses JSON)
-
-export const get = async <T>(key: string): Promise<T | null> => {
-  const value = await AsyncStorage.getItem(key);
-  if (value === null) return null;
-  return JSON.parse(value) as T;
+export type Transaction = {
+  id: string;
+  expenseOrIncome: "expense" | "income";
+  amount: number;
+  type: string;
+  date: string;
+  note: string;
 };
 
-// Set a value from storage (automatically parses JSON)
+export async function saveTransaction(transaction: Transaction) {
+  try {
+    const existing = await AsyncStorage.getItem(TRANSACTIONS_KEY);
 
-export const set = async (key: string, value: unknown): Promise<void> => {
-  await AsyncStorage.setItem(key, JSON.stringify(value));
-};
+    const transactions: Transaction[] = existing ? JSON.parse(existing) : [];
 
-// Remove a value from storage
-export const remove = async (key: string): Promise<void> => {
-  await AsyncStorage.removeItem(key);
-};
+    transactions.push(transaction);
+
+    await AsyncStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
+  } catch (error) {
+    console.error("Failed to save transaction:", error);
+  }
+}
+
+export async function getTransactions(): Promise<Transaction[]> {
+  try {
+    const data = await AsyncStorage.getItem(TRANSACTIONS_KEY);
+
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Failed to get transactions:", error);
+    return [];
+  }
+}

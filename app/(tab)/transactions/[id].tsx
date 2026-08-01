@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { router } from "expo-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { TransactionFormData, transactionSchema } from "../../../lib/schema";
+import { saveTransaction } from "../../../lib/storage";
 import { theme } from "../../../styles/theme";
 
 const AddTransaction = () => {
@@ -79,8 +81,22 @@ const AddTransaction = () => {
     });
   };
 
-  const onSubmit = (data: TransactionFormData) => {
-    console.log(data);
+  const onSubmit = async (data: TransactionFormData) => {
+    const transaction = {
+      id: Date.now().toString(),
+      expenseOrIncome: data.expenseOrIncome,
+      amount:
+        data.expenseOrIncome === "expense"
+          ? -Math.abs(data.amount)
+          : Math.abs(data.amount),
+      type: data.type,
+      date: data.date,
+      note: data.note ?? "",
+    };
+
+    await saveTransaction(transaction);
+
+    router.back();
   };
 
   return (
@@ -237,17 +253,7 @@ const AddTransaction = () => {
         <TextInput
           style={[styles.input, styles.noteInput]}
           onChangeText={(text) => {
-            setAmount(text);
-
-            const numericAmount = Number(text);
-
-            setValue(
-              "amount",
-              Number.isNaN(numericAmount) ? 0 : numericAmount,
-              {
-                shouldValidate: true,
-              },
-            );
+            setValue("note", text);
           }}
           placeholder="e.g. weekly groceries from co-op..."
           placeholderTextColor={theme.colors.colorTextMuted}
