@@ -1,15 +1,26 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyscStorage from "@react-native-async-storage/async-storage";
 
-const TRANSACTIONS_KEY = "transactions";
+// Typed Key names to prevent typos
 
-export const saveTransactions = async (transactions: any[]) => {
-  await AsyncStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
+export const STORAGE_KEYS = {
+  TRANSACTIONS: "transactions",
+} as const;
+
+// Get a value from storage (automatically parses JSON)
+
+export const get = async <T>(key: string): Promise<T | null> => {
+  const value = await AsyscStorage.getItem(key);
+  if (value === null) return null;
+  return JSON.parse(value) as T;
 };
 
-export const getTransactions = async () => {
-  const data = await AsyncStorage.getItem(TRANSACTIONS_KEY);
+// Set a value from storage (automatically parses JSON)
 
-  if (!data) return [];
+export const set = async (key: string, value: unknown): Promise<void> => {
+  await AsyscStorage.setItem(key, JSON.stringify(value));
+};
 
-  return JSON.parse(data);
+// Remove a value from storage
+export const remove = async (key: string): Promise<void> => {
+  await AsyscStorage.removeItem(key);
 };
