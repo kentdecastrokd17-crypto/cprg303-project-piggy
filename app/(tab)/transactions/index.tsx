@@ -1,7 +1,6 @@
 "use client";
 
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
   FlatList,
@@ -12,22 +11,25 @@ import {
   View,
 } from "react-native";
 import TransactionCard from "../../../components/TransactionCard";
-import { get, STORAGE_KEYS } from "../../../lib/storage";
+import { getTransactions, Transaction } from "../../../lib/storage";
 import { theme } from "../../../styles/theme";
 
-const index = () => {
+const Transactions = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [selectedType, setSelectedType] = useState("All");
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useFocusEffect(
     useCallback(() => {
       const loadTransactions = async () => {
-        const storedTransactions =
-          (await get<any[]>(STORAGE_KEYS.TRANSACTIONS)) ?? [];
+        try {
+          const storedTransactions = await getTransactions();
 
-        setTransactions(storedTransactions);
+          setTransactions(storedTransactions);
+        } catch (error) {
+          console.error("Failed to load transactions:", error);
+        }
       };
 
       loadTransactions();
@@ -115,7 +117,7 @@ const index = () => {
   );
 };
 
-export default index;
+export default Transactions;
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -126,28 +128,28 @@ const styles = StyleSheet.create({
     height: 50,
   },
   transactionBarTypeContainer: {
-    padding: 15,
-    borderWidth: 0.5,
-    backgroundColor: "#ffffff",
-    height: 30,
+    paddingHorizontal: 15,
+    height: 40,
     marginHorizontal: 5,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 0.5,
+    backgroundColor: "#ffffff",
   },
   transactionBarTypeText: {
     fontSize: 15,
     color: theme.colors.colorTextMuted,
   },
   transactionBarTypeSelectedContainer: {
-    padding: 15,
-    borderWidth: 0.5,
-    backgroundColor: theme.colors.colorPrimary,
-    height: 30,
+    paddingHorizontal: 15,
+    height: 40,
     marginHorizontal: 5,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 0.5,
+    backgroundColor: theme.colors.colorPrimary,
   },
   transactionBarSelectedTypeText: {
     fontSize: 15,
@@ -191,8 +193,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addTransactionButtonText: {
-    fontSize: 50,
-    paddingBottom: 10,
+    fontSize: 32,
     color: "#ffffff",
+    lineHeight: 32,
   },
 });

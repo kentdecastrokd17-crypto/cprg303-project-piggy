@@ -31,6 +31,7 @@ export default function Header({ headerInfo }: Props) {
 
 const styles = StyleSheet.create({
   headerContainer: {
+    marginTop: 20,
     flexDirection: "row",
     width: "100%",
     padding: 20,

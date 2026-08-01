@@ -2,18 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 import { theme } from "../styles/theme";
 
-type Transaction = {
-  title: string;
-  type: string;
-  date: string;
-  amount: number;
-};
+import { Transaction } from "../lib/storage";
 
 type Props = {
   transaction: Transaction;
 };
 
-export default function AppCard({ transaction }: Props) {
+export default function TransactionCard({ transaction }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.cardTypeIconContainer}>
@@ -26,7 +21,7 @@ export default function AppCard({ transaction }: Props) {
       </View>
       <View style={styles.innerCard}>
         <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitleText}>{transaction.title}</Text>
+          <Text style={styles.cardTitleText}>{transaction.note}</Text>
         </View>
         <View style={styles.cardAmountContainer}>
           <Text
