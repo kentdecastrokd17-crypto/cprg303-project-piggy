@@ -1,0 +1,49 @@
+=====================================================================
+ADR-006: Database Storage
+=====================================================================
+
+Status: Accepted
+Date: July 19, 2026
+
+Context
+-------
+Piggy requires persistent local storage for user information, transactions,
+budgets, and financial goals. The application is intended for use on a single
+device and does not require cloud synchronization.
+
+Decision
+--------
+Piggy will use an internal unencrypted local database.
+
+Rationale
+---------
+- Stores data directly on the user's device.
+- Works without an internet connection.
+- Simpler implementation.
+- Lower development and maintenance costs.
+- Sufficient for the project's scope.
+
+Alternatives Considered
+-----------------------
+Cloud Database
+- Adds unnecessary complexity.
+- Increases costs.
+- Requires backend infrastructure.
+
+Encrypted Local Database
+- More difficult to implement.
+- Additional security benefits do not justify the extra complexity.
+
+Consequences
+------------
+
+Positive
+- Easy to implement.
+- Works offline.
+- Fast data access.
+- No server or hosting costs.
+
+Negative
+- Data could be lost if the application is removed.
+- No synchronization between devices.
+- Unencrypted data is more vulnerable if the device is compromised.
