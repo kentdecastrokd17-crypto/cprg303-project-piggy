@@ -115,6 +115,7 @@ const AddGoal = () => {
   return (
     <View style={styles.contentContainer}>
       {/* Goal Amount */}
+      <Text style={styles.amountEntryTitleText}>Amount of your goal</Text>
       <View style={styles.amountEntryContainer}>
         <View style={styles.dollarSignContainer}>
           <Text style={styles.dollarSignText}>$</Text>
@@ -150,6 +151,7 @@ const AddGoal = () => {
       </View>
 
       {/* Progress Amount */}
+      <Text style={styles.amountEntryTitleText}>Your current progress</Text>
       <View style={styles.amountEntryContainer}>
         <View style={styles.dollarSignContainer}>
           <Text style={styles.dollarSignText}>$</Text>
@@ -228,7 +230,7 @@ const AddGoal = () => {
 
       {/* Title */}
       <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Note (optional)</Text>
+        <Text style={styles.inputLabel}>Goal Title</Text>
 
         <TextInput
           style={[styles.input, styles.noteInput]}
@@ -237,7 +239,7 @@ const AddGoal = () => {
             setTitle(text);
             setValue("title", text);
           }}
-          placeholder="e.g. weekly groceries from co-op..."
+          placeholder="e.g. Saving for a trip"
           placeholderTextColor={theme.colors.colorTextMuted}
           multiline
         />
@@ -260,44 +262,16 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.colorBg,
   },
 
-  expenseIncomeContainer: {
-    width: "100%",
-    backgroundColor: theme.colors.colorBorder,
-    height: 40,
-    flexDirection: "row",
-    borderRadius: 20,
-    marginBottom: 20,
-  },
-
-  expenseIncomeInnerContainer: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-  },
-
-  expenseSelectedContainer: {
-    backgroundColor: theme.colors.colorExpense,
-  },
-
-  incomeSelectedContainer: {
-    backgroundColor: theme.colors.colorSuccess,
-  },
-
-  expenseIncomeText: {
-    color: theme.colors.colorTextMuted,
-    fontSize: 17,
-    fontWeight: "500",
-  },
-
-  expenseIncomeSelectedText: {
-    color: theme.colors.colorSurface,
-  },
-
   amountEntryContainer: {
     flexDirection: "row",
     width: "100%",
     height: 50,
+  },
+  amountEntryTitleText: {
+    fontSize: 16,
+    color: theme.colors.colorText,
+    marginTop: 10,
+    fontWeight: "500",
   },
 
   dollarSignContainer: {
@@ -407,10 +381,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     justifyContent: "center",
-  },
-
-  inputText: {
-    color: theme.colors.colorText,
   },
 
   noteInput: {
