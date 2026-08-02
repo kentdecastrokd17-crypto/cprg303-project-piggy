@@ -49,3 +49,24 @@ export async function getTransactions(): Promise<Transaction[]> {
     return [];
   }
 }
+
+export async function deleteTransaction(id: string): Promise<void> {
+  try {
+    const storedTransactions = await AsyncStorage.getItem(TRANSACTIONS_KEY);
+
+    const transactions: Transaction[] = storedTransactions
+      ? JSON.parse(storedTransactions)
+      : [];
+
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction.id !== id,
+    );
+
+    await AsyncStorage.setItem(
+      TRANSACTIONS_KEY,
+      JSON.stringify(updatedTransactions),
+    );
+  } catch (error) {
+    console.error("Error deleting transaction:", error);
+  }
+}

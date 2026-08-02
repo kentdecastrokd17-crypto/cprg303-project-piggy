@@ -11,7 +11,11 @@ import {
   View,
 } from "react-native";
 import TransactionCard from "../../../components/TransactionCard";
-import { getTransactions, Transaction } from "../../../lib/storage";
+import {
+  deleteTransaction,
+  getTransactions,
+  Transaction,
+} from "../../../lib/storage";
 import { theme } from "../../../styles/theme";
 
 const Transactions = () => {
@@ -36,19 +40,23 @@ const Transactions = () => {
     }, []),
   );
   //filtering the list of transactions so selected month is considered
-  const filteredTransactions = transactions.filter((transaction) => {
-    const [transactionYear, transactionMonth] = transaction.date
-      .split("-")
-      .map(Number);
+  const filteredTransactions = transactions
+    .filter((transaction) => {
+      const [transactionYear, transactionMonth] = transaction.date
+        .split("-")
+        .map(Number);
 
-    const matchesDate =
-      transactionYear === year && transactionMonth - 1 === month;
+      const matchesDate =
+        transactionYear === year && transactionMonth - 1 === month;
 
-    const matchesType =
-      selectedType === "All" || transaction.type === selectedType;
+      const matchesType =
+        selectedType === "All" || transaction.type === selectedType;
 
-    return matchesDate && matchesType;
-  });
+      return matchesDate && matchesType;
+    })
+    .sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
   const transactionTypes = [
     "All",
     "Food",
@@ -60,6 +68,17 @@ const Transactions = () => {
     "Income",
     "Other",
   ];
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTransaction(id);
+
+      setTransactions((currentTransactions) =>
+        currentTransactions.filter((transaction) => transaction.id !== id),
+      );
+    } catch (error) {
+      console.error("Failed to delete transaction:", error);
+    }
+  };
   return (
     <View style={styles.contentContainer}>
       <ScrollView
@@ -105,7 +124,9 @@ const Transactions = () => {
         <FlatList
           data={filteredTransactions.slice(0, 5)}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <TransactionCard transaction={item} />}
+          renderItem={({ item }) => (
+            <TransactionCard transaction={item} onDelete={handleDelete} />
+          )}
         />
       </View>
       <Pressable

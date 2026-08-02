@@ -6,49 +6,14 @@ import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { TransactionFormData, transactionSchema } from "../../../lib/schema";
 import { saveTransaction } from "../../../lib/storage";
+import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
-
 const AddTransaction = () => {
   const [expenseIncome, setExpenseIncome] = useState("expense");
   const [amount, setAmount] = useState("0.00");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Food");
-
-  const transactionTypes = [
-    {
-      name: "Food",
-      icon: "🛒",
-    },
-    {
-      name: "Transport",
-      icon: "🚌",
-    },
-    {
-      name: "Bills",
-      icon: "💡",
-    },
-    {
-      name: "Fun",
-      icon: "🎬",
-    },
-    {
-      name: "Housing",
-      icon: "🏠",
-    },
-    {
-      name: "Health",
-      icon: "❤️",
-    },
-    {
-      name: "Income",
-      icon: "💼",
-    },
-    {
-      name: "Other",
-      icon: "➕",
-    },
-  ] as const;
 
   const {
     handleSubmit,
@@ -183,7 +148,7 @@ const AddTransaction = () => {
       <Text style={styles.inputLabel}>Category</Text>
 
       <View style={styles.categoriesContainer}>
-        {transactionTypes.map((category) => (
+        {transactionIcons.map((category: (typeof transactionIcons)[number]) => (
           <Pressable
             key={category.name}
             style={[

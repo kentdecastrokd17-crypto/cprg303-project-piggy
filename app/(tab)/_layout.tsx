@@ -55,6 +55,7 @@ export default function TabLayout() {
           paddingLeft: 10,
           paddingRight: 10,
           backgroundColor: theme.colors.colorSurface,
+          paddingBottom: 50,
         },
       })}
     >
