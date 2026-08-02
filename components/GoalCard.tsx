@@ -1,14 +1,21 @@
 import { theme } from "@/styles/theme";
+import { router } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const GoalCard = () => {
+type GoalCardProps = {
+  goalType: string;
+};
+
+const GoalCard = ({ goalType }: GoalCardProps) => {
   const width = "75%";
   return (
     <View style={styles.contentContainer}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitleText}>Goals</Text>
-        <Pressable>
+        <Text style={styles.headerTitleText}>
+          {goalType.charAt(0).toUpperCase() + goalType.slice(1)}
+        </Text>
+        <Pressable onPress={() => router.push(`/financialProfile/${goalType}`)}>
           <Text style={styles.addGoalText}>Add goal</Text>
         </Pressable>
       </View>

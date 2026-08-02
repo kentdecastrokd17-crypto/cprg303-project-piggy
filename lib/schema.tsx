@@ -31,7 +31,7 @@ export type TransactionFormData = z.infer<typeof transactionSchema>;
 
 //schema for goal form
 export const goalSchema = z.object({
-  title: z.string().max(50, "Note is over 50 character maximum").optional(),
+  title: z.string().max(50, "Note is over 50 character maximum"),
   goalType: z.enum(["budgeting", "long-term"]),
 
   goalAmount: z

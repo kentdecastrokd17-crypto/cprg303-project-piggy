@@ -8,7 +8,8 @@ const FinancialProfile = () => {
   return (
     <View style={styles.contentContainer}>
       <FinancialHealth />
-      <GoalCard></GoalCard>
+      <GoalCard goalType="Budgeting" />
+      <GoalCard goalType="long-term" />
     </View>
   );
 };

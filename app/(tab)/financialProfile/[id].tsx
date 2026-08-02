@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { GoalFormData, goalSchema } from "../../../lib/schema";
-import { addGoal, saveGoal } from "../../../lib/storage";
+import { addGoal, getGoalById, Goal, saveGoal } from "../../../lib/storage";
 import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
 const AddGoal = () => {
@@ -32,19 +32,35 @@ const AddGoal = () => {
     },
   });
 
-  const increaseAmount = () => {
-    setAmount((prev) => {
-      const newAmount = (parseFloat(prev) + 1).toString();
-      setValue("amount", Number(newAmount));
-      return newAmount;
+  const increaseGoalAmount = () => {
+    setGoalAmount((prev) => {
+      const newGoalAmount = (parseFloat(prev) + 1).toString();
+      setValue("goalAmount", Number(newGoalAmount));
+      return newGoalAmount;
     });
   };
 
-  const decreaseAmount = () => {
-    setAmount((prev) => {
-      const newAmount = Math.max(0, parseFloat(prev) - 1).toString();
-      setValue("amount", Number(newAmount));
-      return newAmount;
+  const decreaseGoalAmount = () => {
+    setGoalAmount((prev) => {
+      const newGoalAmount = Math.max(0, parseFloat(prev) - 1).toString();
+      setValue("goalAmount", Number(newGoalAmount));
+      return newGoalAmount;
+    });
+  };
+
+  const increaseProgressAmount = () => {
+    setProgressAmount((prev) => {
+      const newProgressAmount = (parseFloat(prev) + 1).toString();
+      setValue("progressAmount", Number(newProgressAmount));
+      return newProgressAmount;
+    });
+  };
+
+  const decreaseProgressAmount = () => {
+    setProgressAmount((prev) => {
+      const newProgressAmount = Math.max(0, parseFloat(prev) - 1).toString();
+      setValue("progressAmount", Number(newProgressAmount));
+      return newProgressAmount;
     });
   };
 
@@ -69,7 +85,8 @@ const AddGoal = () => {
   useEffect(() => {
     const loadGoal = async () => {
       // ADD MODE
-      if (!id || id === "new") {
+      if (!id || id === "budgeting" || id === "long-term") {
+        setGoalType(id);
         return;
       }
 
@@ -82,8 +99,8 @@ const AddGoal = () => {
 
       setTitle(goal.title ?? "");
       setGoalType(goal.goalType);
-      setGoalAmount(Math.abs(goal.amount).toString());
-      setProgressAmount(Math.abs(goal.amount).toString());
+      setGoalAmount(Math.abs(goal.goalAmount).toString());
+      setProgressAmount(Math.abs(goal.progressAmount).toString());
       setSelectedCategory(goal.type);
 
       setValue("title", goal.title ?? "");
@@ -97,50 +114,7 @@ const AddGoal = () => {
   }, [id]);
   return (
     <View style={styles.contentContainer}>
-      {/* Expense / Income */}
-      <View style={styles.expenseIncomeContainer}>
-        <Pressable
-          style={[
-            styles.expenseIncomeInnerContainer,
-            expenseIncome === "expense" && styles.expenseSelectedContainer,
-          ]}
-          onPress={() => {
-            setExpenseIncome("expense");
-            setValue("expenseOrIncome", "expense");
-          }}
-        >
-          <Text
-            style={[
-              styles.expenseIncomeText,
-              expenseIncome === "expense" && styles.expenseIncomeSelectedText,
-            ]}
-          >
-            Expense
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.expenseIncomeInnerContainer,
-            expenseIncome === "income" && styles.incomeSelectedContainer,
-          ]}
-          onPress={() => {
-            setExpenseIncome("income");
-            setValue("expenseOrIncome", "income");
-          }}
-        >
-          <Text
-            style={[
-              styles.expenseIncomeText,
-              expenseIncome === "income" && styles.expenseIncomeSelectedText,
-            ]}
-          >
-            Income
-          </Text>
-        </Pressable>
-      </View>
-
-      {/* Amount */}
+      {/* Goal Amount */}
       <View style={styles.amountEntryContainer}>
         <View style={styles.dollarSignContainer}>
           <Text style={styles.dollarSignText}>$</Text>
@@ -149,27 +123,64 @@ const AddGoal = () => {
         <View style={styles.amountContainer}>
           <TextInput
             style={styles.amountText}
-            value={amount}
+            value={goalAmount}
             onChangeText={(text) => {
-              setAmount(text);
-              setValue("amount", Number(text));
+              setGoalAmount(text);
+              setValue("goalAmount", Number(text));
             }}
             keyboardType="decimal-pad"
             placeholder="0.00"
             placeholderTextColor={theme.colors.colorTextMuted}
           />
 
-          {errors.amount && (
-            <Text style={styles.errorText}>{errors.amount.message}</Text>
+          {errors.goalAmount && (
+            <Text style={styles.errorText}>{errors.goalAmount.message}</Text>
           )}
         </View>
 
         <View style={styles.arrowContainer}>
-          <Pressable onPress={increaseAmount}>
+          <Pressable onPress={increaseGoalAmount}>
             <Text style={styles.arrowText}>▲</Text>
           </Pressable>
 
-          <Pressable onPress={decreaseAmount}>
+          <Pressable onPress={decreaseGoalAmount}>
+            <Text style={styles.arrowText}>▼</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Progress Amount */}
+      <View style={styles.amountEntryContainer}>
+        <View style={styles.dollarSignContainer}>
+          <Text style={styles.dollarSignText}>$</Text>
+        </View>
+
+        <View style={styles.amountContainer}>
+          <TextInput
+            style={styles.amountText}
+            value={progressAmount}
+            onChangeText={(text) => {
+              setProgressAmount(text);
+              setValue("progressAmount", Number(text));
+            }}
+            keyboardType="decimal-pad"
+            placeholder="0.00"
+            placeholderTextColor={theme.colors.colorTextMuted}
+          />
+
+          {errors.progressAmount && (
+            <Text style={styles.errorText}>
+              {errors.progressAmount.message}
+            </Text>
+          )}
+        </View>
+
+        <View style={styles.arrowContainer}>
+          <Pressable onPress={increaseProgressAmount}>
+            <Text style={styles.arrowText}>▲</Text>
+          </Pressable>
+
+          <Pressable onPress={decreaseProgressAmount}>
             <Text style={styles.arrowText}>▼</Text>
           </Pressable>
         </View>
@@ -215,43 +226,16 @@ const AddGoal = () => {
         ))}
       </View>
 
-      {/* Date */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Date</Text>
-
-        <Pressable style={styles.input} onPress={() => setShowDatePicker(true)}>
-          <Text style={styles.inputText}>
-            {date.toISOString().split("T")[0]}
-          </Text>
-        </Pressable>
-
-        {showDatePicker && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              setShowDatePicker(false);
-
-              if (selectedDate) {
-                setDate(selectedDate);
-                setValue("date", selectedDate.toISOString().split("T")[0]);
-              }
-            }}
-          />
-        )}
-      </View>
-
-      {/* Note */}
+      {/* Title */}
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Note (optional)</Text>
 
         <TextInput
           style={[styles.input, styles.noteInput]}
-          value={note}
+          value={title}
           onChangeText={(text) => {
-            setNote(text);
-            setValue("note", text);
+            setTitle(text);
+            setValue("title", text);
           }}
           placeholder="e.g. weekly groceries from co-op..."
           placeholderTextColor={theme.colors.colorTextMuted}
@@ -267,7 +251,7 @@ const AddGoal = () => {
   );
 };
 
-export default AddTransaction;
+export default AddGoal;
 
 const styles = StyleSheet.create({
   contentContainer: {
