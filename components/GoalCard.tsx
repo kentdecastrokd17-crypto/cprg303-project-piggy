@@ -13,15 +13,15 @@ const GoalCard = () => {
         </Pressable>
       </View>
       <View style={styles.goalsContainer}>
-        <View style={styles.idvGoalContainer}>
+        <Pressable style={styles.idvGoalContainer}>
           <View style={styles.idvGoalHeaderContainer}>
-            <Text>Dining Out</Text>
-            <Text> $140/$200</Text>
+            <Text style={styles.idvGoalTitleText}>Dining Out</Text>
+            <Text style={styles.idvGoalProgressText}> $140 / $200</Text>
           </View>
           <View style={styles.idvGoalBar}>
             <View style={[styles.idvGoalBarFilled, { width: width }]}></View>
           </View>
-        </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.colorTextMuted,
     flexDirection: "column",
+    borderRadius: 20,
+    marginTop: 10,
+    paddingVertical: 10,
   },
   idvGoalContainer: {
     flexDirection: "column",
@@ -61,6 +64,17 @@ const styles = StyleSheet.create({
   idvGoalHeaderContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingHorizontal: 20,
+  },
+  idvGoalTitleText: {
+    color: theme.colors.colorText,
+    fontWeight: "500",
+    fontSize: 16,
+    alignSelf: "center",
+  },
+  idvGoalProgressText: {
+    color: theme.colors.colorTextMuted,
+    alignSelf: "center",
   },
   idvGoalBar: {
     width: "90%",

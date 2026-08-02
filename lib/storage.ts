@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//Storage and functions for transactions
 const TRANSACTIONS_KEY = "transactions";
 
 export type Transaction = {
@@ -96,6 +97,90 @@ export async function getTransactionById(
     return transactions.find((transaction) => transaction.id === id);
   } catch (error) {
     console.error("Failed to get transaction by id:", error);
+    return undefined;
+  }
+}
+
+//Storage and functions for goals
+const GOALS_KEY = "goals";
+
+export type Goal = {
+  id: string;
+  title: string;
+  goalType: "budgeting" | "long-term";
+  goalAmount: number;
+  progressAmount: number;
+  type:
+    | "Food"
+    | "Transport"
+    | "Bills"
+    | "Fun"
+    | "Housing"
+    | "Health"
+    | "Income"
+    | "Other";
+};
+
+export const addGoal = async (goal: Goal) => {
+  try {
+    const goals = await getGoals();
+
+    const updatedGoals = [...goals, goal];
+
+    await AsyncStorage.setItem(GOALS_KEY, JSON.stringify(updatedGoals));
+  } catch (error) {
+    console.error("Failed to add goal:", error);
+  }
+};
+
+export const saveGoal = async (goal: Goal) => {
+  try {
+    const goals = await getGoals();
+
+    const updatedGoals = goals.map((item) =>
+      item.id === goal.id ? goal : item,
+    );
+
+    await AsyncStorage.setItem(GOALS_KEY, JSON.stringify(updatedGoals));
+  } catch (error) {
+    console.error("Failed to update goal:", error);
+  }
+};
+
+export async function getGoals(): Promise<Goal[]> {
+  try {
+    const storedGoals = await AsyncStorage.getItem(GOALS_KEY);
+
+    return storedGoals ? JSON.parse(storedGoals) : [];
+  } catch (error) {
+    console.error("Failed to get goals:", error);
+    return [];
+  }
+}
+
+export async function deleteGoal(id: string): Promise<void> {
+  try {
+    const storedGoals = await AsyncStorage.getItem(GOALS_KEY);
+
+    const goals: Goal[] = storedGoals ? JSON.parse(storedGoals) : [];
+
+    const updatedGoals = goals.filter((goal) => goal.id !== id);
+
+    await AsyncStorage.setItem(GOALS_KEY, JSON.stringify(updatedGoals));
+  } catch (error) {
+    console.error("Error deleting goal:", error);
+  }
+}
+
+export async function getGoalById(id: string): Promise<Goal | undefined> {
+  try {
+    const storedGoals = await AsyncStorage.getItem(GOALS_KEY);
+
+    const goals: Goal[] = storedGoals ? JSON.parse(storedGoals) : [];
+
+    return goals.find((goal) => goal.id === id);
+  } catch (error) {
+    console.error("Failed to get goal by id:", error);
     return undefined;
   }
 }
