@@ -9,7 +9,8 @@ import { addGoal, getGoalById, Goal, saveGoal } from "../../../lib/storage";
 import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
 const AddGoal = () => {
-  const { id } = useLocalSearchParams();
+  type GoalType = "budgeting" | "long-term";
+  const { id } = useLocalSearchParams<{ id?: string }>();
 
   const [title, setTitle] = useState("");
   const [goalType, setGoalType] = useState("");
@@ -63,10 +64,21 @@ const AddGoal = () => {
       return newProgressAmount;
     });
   };
+  const { id } = useLocalSearchParams<{ id?: string }>();
 
+  if (id === "budgeting" || id === "long-term") {
+    const type = id as GoalType;
+
+    setGoalType(type);
+    setValue("goalType", type);
+    return;
+  }
   const onSubmit = async (data: GoalFormData) => {
     const goal: Goal = {
-      id: id === "new" ? Date.now().toString() : id.toString(),
+      id:
+        id === "budgeting" || id === "long-term"
+          ? Date.now().toString()
+          : id.toString(),
       title: data.title,
       goalType: data.goalType,
       goalAmount: data.goalAmount,
@@ -87,6 +99,7 @@ const AddGoal = () => {
       // ADD MODE
       if (!id || id === "budgeting" || id === "long-term") {
         setGoalType(id);
+        setValue("goalType", id);
         return;
       }
 

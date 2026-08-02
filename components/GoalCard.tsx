@@ -1,14 +1,33 @@
 import { theme } from "@/styles/theme";
-import { router } from "expo-router";
-import React from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Goal, getGoals } from "../lib/storage";
 
 type GoalCardProps = {
   goalType: string;
 };
 
 const GoalCard = ({ goalType }: GoalCardProps) => {
-  const width = "75%";
+  const [goals, setGoals] = useState<Goal[]>([]);
+  useFocusEffect(
+    useCallback(() => {
+      const loadGoals = async () => {
+        try {
+          const storedGoals = await getGoals();
+
+          setGoals(storedGoals);
+        } catch (error) {
+          console.error("Failed to load transactions:", error);
+        }
+      };
+
+      loadGoals();
+    }, []),
+  );
+  //filtering the list of transactions so selected month is considered
+  const filteredGoals = goals.filter((goal) => goal.goalType === goalType);
+
   return (
     <View style={styles.contentContainer}>
       <View style={styles.headerContainer}>
@@ -20,15 +39,28 @@ const GoalCard = ({ goalType }: GoalCardProps) => {
         </Pressable>
       </View>
       <View style={styles.goalsContainer}>
-        <Pressable style={styles.idvGoalContainer}>
-          <View style={styles.idvGoalHeaderContainer}>
-            <Text style={styles.idvGoalTitleText}>Dining Out</Text>
-            <Text style={styles.idvGoalProgressText}> $140 / $200</Text>
-          </View>
-          <View style={styles.idvGoalBar}>
-            <View style={[styles.idvGoalBarFilled, { width: width }]}></View>
-          </View>
-        </Pressable>
+        {filteredGoals.map((goal) => (
+          <Pressable key={goal.id} style={styles.idvGoalContainer}>
+            <View style={styles.idvGoalHeaderContainer}>
+              <Text style={styles.idvGoalTitleText}>{goal.title}</Text>
+
+              <Text style={styles.idvGoalProgressText}>
+                ${goal.progressAmount} / ${goal.goalAmount}
+              </Text>
+            </View>
+
+            <View style={styles.idvGoalBar}>
+              <View
+                style={[
+                  styles.idvGoalBarFilled,
+                  {
+                    width: `${(goal.progressAmount / goal.goalAmount) * 100}%`,
+                  },
+                ]}
+              />
+            </View>
+          </Pressable>
+        ))}
       </View>
     </View>
   );
