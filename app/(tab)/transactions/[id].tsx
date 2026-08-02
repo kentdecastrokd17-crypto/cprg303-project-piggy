@@ -1,19 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { TransactionFormData, transactionSchema } from "../../../lib/schema";
-import { saveTransaction } from "../../../lib/storage";
+import { getTransactionById, saveTransaction } from "../../../lib/storage";
 import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
 const AddTransaction = () => {
+  const { id } = useLocalSearchParams();
+
   const [expenseIncome, setExpenseIncome] = useState("expense");
   const [amount, setAmount] = useState("0.00");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Food");
+  const [note, setNote] = useState("");
 
   const {
     handleSubmit,
@@ -63,7 +66,29 @@ const AddTransaction = () => {
 
     router.back();
   };
+  useEffect(() => {
+    const loadTransaction = async () => {
+      if (!id) return;
 
+      const transaction = await getTransactionById(id as string);
+
+      if (!transaction) return;
+
+      setExpenseIncome(transaction.expenseOrIncome);
+      setAmount(Math.abs(transaction.amount).toString());
+      setSelectedCategory(transaction.type);
+      setDate(new Date(transaction.date));
+      setNote(transaction.note);
+
+      setValue("expenseOrIncome", transaction.expenseOrIncome);
+      setValue("amount", Math.abs(transaction.amount));
+      setValue("type", transaction.type);
+      setValue("date", transaction.date);
+      setValue("note", transaction.note);
+    };
+
+    loadTransaction();
+  }, [id]);
   return (
     <View style={styles.contentContainer}>
       {/* Expense / Income */}
@@ -217,7 +242,9 @@ const AddTransaction = () => {
 
         <TextInput
           style={[styles.input, styles.noteInput]}
+          value={note}
           onChangeText={(text) => {
+            setNote(text);
             setValue("note", text);
           }}
           placeholder="e.g. weekly groceries from co-op..."

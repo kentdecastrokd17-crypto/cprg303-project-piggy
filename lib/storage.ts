@@ -70,3 +70,20 @@ export async function deleteTransaction(id: string): Promise<void> {
     console.error("Error deleting transaction:", error);
   }
 }
+
+export async function getTransactionById(
+  id: string,
+): Promise<Transaction | undefined> {
+  try {
+    const storedTransactions = await AsyncStorage.getItem(TRANSACTIONS_KEY);
+
+    const transactions: Transaction[] = storedTransactions
+      ? JSON.parse(storedTransactions)
+      : [];
+
+    return transactions.find((transaction) => transaction.id === id);
+  } catch (error) {
+    console.error("Failed to get transaction by id:", error);
+    return undefined;
+  }
+}

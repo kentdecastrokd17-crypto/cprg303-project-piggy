@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Transaction } from "../lib/storage";
 import { transactionIcons } from "../lib/transactionIcons";
@@ -56,13 +57,16 @@ export default function TransactionCard({ transaction, onDelete }: Props) {
         </View>
       </View>
 
-      <View style={styles.editCancelContainer}>
+      <Pressable
+        style={styles.editCancelContainer}
+        onPress={() => router.push(`/transactions/${transaction.id}`)}
+      >
         <Ionicons
           name="pencil-outline"
           size={20}
           color={theme.colors.colorTextMuted}
         />
-      </View>
+      </Pressable>
 
       <Pressable
         style={styles.editCancelContainer}
