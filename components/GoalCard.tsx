@@ -3,6 +3,7 @@ import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const GoalCard = () => {
+  const width = "75%";
   return (
     <View style={styles.contentContainer}>
       <View style={styles.headerContainer}>
@@ -16,6 +17,9 @@ const GoalCard = () => {
           <View style={styles.idvGoalHeaderContainer}>
             <Text>Dining Out</Text>
             <Text> $140/$200</Text>
+          </View>
+          <View style={styles.idvGoalBar}>
+            <View style={[styles.idvGoalBarFilled, { width: width }]}></View>
           </View>
         </View>
       </View>
@@ -57,5 +61,19 @@ const styles = StyleSheet.create({
   idvGoalHeaderContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  idvGoalBar: {
+    width: "90%",
+    backgroundColor: theme.colors.colorBg,
+    height: 10,
+    borderRadius: 20,
+    alignSelf: "center",
+
+    marginTop: 10,
+  },
+  idvGoalBarFilled: {
+    backgroundColor: theme.colors.colorPrimary,
+    flex: 1,
+    borderRadius: 20,
   },
 });
