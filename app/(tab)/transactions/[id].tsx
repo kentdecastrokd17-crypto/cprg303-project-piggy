@@ -9,6 +9,7 @@ import {
   addTransaction,
   getTransactionById,
   saveTransaction,
+  Transaction,
 } from "../../../lib/storage";
 import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
