@@ -6,7 +6,7 @@ import { theme } from "../styles/theme";
 
 type Props = {
   transaction: Transaction;
-  onDelete: (id: string) =>
+  onDelete: (id: string) => void;
 };
 
 export default function TransactionCard({ transaction, onDelete }: Props) {
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
 
   cardAmountContainer: {
     alignItems: "flex-end",
+    paddingVertical: 3,
   },
 
   cardAmountText: {

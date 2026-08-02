@@ -50,7 +50,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: theme.colors.colorText,
         tabBarInactiveTintColor: theme.colors.colorTextMuted,
         tabBarStyle: {
-          height: "10%",
+          height: 110,
           paddingTop: 15,
           paddingLeft: 10,
           paddingRight: 10,
