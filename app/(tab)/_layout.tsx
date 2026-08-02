@@ -1,52 +1,16 @@
 "use client";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import Header from "../../components/Header";
 import { theme } from "../../styles/theme";
 
 export default function TabLayout() {
-  //retrieve time for hello message
-  function getGreeting() {
-    const hour = new Date().getHours();
-
-    if (hour < 12) {
-      return "GOOD MORNING";
-    } else if (hour < 18) {
-      return "GOOD AFTERNOON";
-    } else {
-      return "GOOD EVENING";
-    }
-  }
-
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      screenOptions={{
+        headerShown: false,
         sceneStyle: {
           backgroundColor: theme.colors.colorBg,
         },
-        header: () => (
-          <Header
-            headerInfo={{
-              title:
-                {
-                  "dashboard/index": getGreeting(),
-                  transactions: "ALL ACTIVITY",
-                  financialProfile: "YOUR STANDING",
-                  "account/index": "MANAGE",
-                }[route.name] ?? "Page",
-
-              subtitle:
-                {
-                  "dashboard/index": "Kent",
-                  transactions: "Transactions",
-                  financialProfile: "Financial Profile",
-                  "account/index": "Account",
-                }[route.name] ?? "PAGE",
-              //intials to KD for testing
-              initials: "KD",
-            }}
-          />
-        ),
         tabBarActiveTintColor: theme.colors.colorText,
         tabBarInactiveTintColor: theme.colors.colorTextMuted,
         tabBarStyle: {
@@ -57,7 +21,7 @@ export default function TabLayout() {
           backgroundColor: theme.colors.colorSurface,
           paddingBottom: 50,
         },
-      })}
+      }}
     >
       <Tabs.Screen
         name="dashboard/index"

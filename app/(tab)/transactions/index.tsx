@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "@/components/Header";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
@@ -80,62 +81,74 @@ const Transactions = () => {
     }
   };
   return (
-    <View style={styles.contentContainer}>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={styles.transactionBarContainer}
-      >
-        {transactionTypes.map((type) => (
-          <Pressable
-            key={type}
-            style={[
-              styles.transactionBarTypeContainer,
-              selectedType === type &&
-                styles.transactionBarTypeSelectedContainer,
-            ]}
-            onPress={() => setSelectedType(type)}
-          >
-            <Text
+    <>
+      <Header
+        headerInfo={{
+          title: "ALL ACTIVITY",
+
+          subtitle: "Transactions",
+          //intials to KD for testing
+          initials: "KD",
+        }}
+      />
+      <View style={styles.contentContainer}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.transactionBarContainer}
+        >
+          {transactionTypes.map((type) => (
+            <Pressable
+              key={type}
               style={[
-                styles.transactionBarTypeText,
-                selectedType === type && styles.transactionBarSelectedTypeText,
+                styles.transactionBarTypeContainer,
+                selectedType === type &&
+                  styles.transactionBarTypeSelectedContainer,
               ]}
+              onPress={() => setSelectedType(type)}
             >
-              {type}
+              <Text
+                style={[
+                  styles.transactionBarTypeText,
+                  selectedType === type &&
+                    styles.transactionBarSelectedTypeText,
+                ]}
+              >
+                {type}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+        <View style={styles.recentTransactionsContainerHeader}>
+          <Pressable>
+            <Text style={styles.recentTransactionContainerHeaderDateText}>
+              {new Date(year, month).toLocaleString("default", {
+                month: "long",
+              })}{" "}
+              {year}
             </Text>
           </Pressable>
-        ))}
-      </ScrollView>
-      <View style={styles.recentTransactionsContainerHeader}>
-        <Pressable>
-          <Text style={styles.recentTransactionContainerHeaderDateText}>
-            {new Date(year, month).toLocaleString("default", {
-              month: "long",
-            })}{" "}
-            {year}
+          <Text style={styles.recentTransactionContainerHeaderNumberOfText}>
+            {filteredTransactions.length} Transactions
           </Text>
+        </View>
+        <View style={styles.recentTransactionsContainer}>
+          <FlatList
+            data={filteredTransactions.slice(0, 5)}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TransactionCard transaction={item} onDelete={handleDelete} />
+            )}
+          />
+        </View>
+        <Pressable
+          style={styles.addTransactionButtonContainer}
+          onPress={() => router.push("/transactions/new")}
+        >
+          <Text style={styles.addTransactionButtonText}>+</Text>
         </Pressable>
-        <Text style={styles.recentTransactionContainerHeaderNumberOfText}>
-          {filteredTransactions.length} Transactions
-        </Text>
       </View>
-      <View style={styles.recentTransactionsContainer}>
-        <FlatList
-          data={filteredTransactions.slice(0, 5)}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TransactionCard transaction={item} onDelete={handleDelete} />
-          )}
-        />
-      </View>
-      <Pressable
-        style={styles.addTransactionButtonContainer}
-        onPress={() => router.push("/transactions/new")}
-      >
-        <Text style={styles.addTransactionButtonText}>+</Text>
-      </Pressable>
-    </View>
+    </>
   );
 };
 

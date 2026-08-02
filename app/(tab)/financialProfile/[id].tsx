@@ -13,7 +13,7 @@ const AddGoal = () => {
   const { id } = useLocalSearchParams<{ id?: string }>();
 
   const [title, setTitle] = useState("");
-  const [goalType, setGoalType] = useState("");
+  const [goalType, setGoalType] = useState<GoalType>("budgeting");
   const [goalAmount, setGoalAmount] = useState("0.00");
   const [progressAmount, setProgressAmount] = useState("0.00");
   const [selectedCategory, setSelectedCategory] = useState("Food");
@@ -64,21 +64,13 @@ const AddGoal = () => {
       return newProgressAmount;
     });
   };
-  const { id } = useLocalSearchParams<{ id?: string }>();
 
-  if (id === "budgeting" || id === "long-term") {
-    const type = id as GoalType;
-
-    setGoalType(type);
-    setValue("goalType", type);
-    return;
-  }
   const onSubmit = async (data: GoalFormData) => {
     const goal: Goal = {
       id:
         id === "budgeting" || id === "long-term"
           ? Date.now().toString()
-          : id.toString(),
+          : (id ?? Date.now().toString()),
       title: data.title,
       goalType: data.goalType,
       goalAmount: data.goalAmount,
@@ -97,14 +89,19 @@ const AddGoal = () => {
   useEffect(() => {
     const loadGoal = async () => {
       // ADD MODE
-      if (!id || id === "budgeting" || id === "long-term") {
-        setGoalType(id);
-        setValue("goalType", id);
+      if (id === "budgeting" || id === "long-term") {
+        const type = id as GoalType;
+
+        setValue("goalType", type);
+        setGoalType(type);
+
         return;
       }
 
       // EDIT MODE
-      const goal = await getGoalById(id.toString());
+      if (!id) return;
+
+      const goal = await getGoalById(id);
 
       if (!goal) {
         return;
@@ -273,6 +270,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     backgroundColor: theme.colors.colorBg,
+    marginTop: 5,
   },
 
   amountEntryContainer: {

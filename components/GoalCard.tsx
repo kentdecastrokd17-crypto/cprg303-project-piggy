@@ -40,7 +40,11 @@ const GoalCard = ({ goalType }: GoalCardProps) => {
       </View>
       <View style={styles.goalsContainer}>
         {filteredGoals.map((goal) => (
-          <Pressable key={goal.id} style={styles.idvGoalContainer}>
+          <Pressable
+            key={goal.id}
+            style={styles.idvGoalContainer}
+            onPress={() => router.push(`/financialProfile/${goal.id}`)}
+          >
             <View style={styles.idvGoalHeaderContainer}>
               <Text style={styles.idvGoalTitleText}>{goal.title}</Text>
 

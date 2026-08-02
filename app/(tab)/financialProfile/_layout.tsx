@@ -6,10 +6,24 @@ export default function TransactionsLayout() {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: theme.colors.colorBg },
+        headerStyle: {
+          backgroundColor: theme.colors.colorBg,
+        },
+        headerTintColor: theme.colors.colorText,
+        headerTitleStyle: {
+          fontWeight: "600",
+        },
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="[id]" options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: "Add or Edit a Goal",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }
