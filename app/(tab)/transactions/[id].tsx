@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { TransactionFormData, transactionSchema } from "../../../lib/schema";
-import { getTransactionById, saveTransaction } from "../../../lib/storage";
+import {
+  addTransaction,
+  getTransactionById,
+  saveTransaction,
+} from "../../../lib/storage";
 import { transactionIcons } from "../../../lib/transactionIcons";
 import { theme } from "../../../styles/theme";
 const AddTransaction = () => {
@@ -50,41 +54,54 @@ const AddTransaction = () => {
   };
 
   const onSubmit = async (data: TransactionFormData) => {
-    const transaction = {
-      id: Date.now().toString(),
+    const transaction: Transaction = {
+      id: id === "new" ? Date.now().toString() : id.toString(),
+
       expenseOrIncome: data.expenseOrIncome,
+
       amount:
         data.expenseOrIncome === "expense"
           ? -Math.abs(data.amount)
           : Math.abs(data.amount),
+
       type: data.type,
       date: data.date,
       note: data.note ?? "",
     };
 
-    await saveTransaction(transaction);
+    if (id === "new") {
+      await addTransaction(transaction);
+    } else {
+      await saveTransaction(transaction);
+    }
 
     router.back();
   };
   useEffect(() => {
     const loadTransaction = async () => {
-      if (!id) return;
+      // ADD MODE
+      if (!id || id === "new") {
+        return;
+      }
 
-      const transaction = await getTransactionById(id as string);
+      // EDIT MODE
+      const transaction = await getTransactionById(id.toString());
 
-      if (!transaction) return;
+      if (!transaction) {
+        return;
+      }
 
       setExpenseIncome(transaction.expenseOrIncome);
       setAmount(Math.abs(transaction.amount).toString());
       setSelectedCategory(transaction.type);
       setDate(new Date(transaction.date));
-      setNote(transaction.note);
+      setNote(transaction.note ?? "");
 
       setValue("expenseOrIncome", transaction.expenseOrIncome);
       setValue("amount", Math.abs(transaction.amount));
       setValue("type", transaction.type);
       setValue("date", transaction.date);
-      setValue("note", transaction.note);
+      setValue("note", transaction.note ?? "");
     };
 
     loadTransaction();

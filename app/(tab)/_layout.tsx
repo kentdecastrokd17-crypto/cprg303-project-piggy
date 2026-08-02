@@ -31,16 +31,16 @@ export default function TabLayout() {
                 {
                   "dashboard/index": getGreeting(),
                   transactions: "ALL ACTIVITY",
-                  "account/index": "YOUR STANDING",
-                  "profile/index": "MANAGE",
+                  financialProfile: "YOUR STANDING",
+                  "account/index": "MANAGE",
                 }[route.name] ?? "Page",
 
               subtitle:
                 {
                   "dashboard/index": "Kent",
                   transactions: "Transactions",
-                  "account/index": "Financial Profile",
-                  "profile/index": "Account",
+                  financialProfile: "Financial Profile",
+                  "account/index": "Account",
                 }[route.name] ?? "PAGE",
               //intials to KD for testing
               initials: "KD",
@@ -88,9 +88,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="account/index"
+        name="financialProfile"
         options={{
-          title: "Account",
+          title: "Financial Profile",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "aperture" : "aperture-outline"}
@@ -102,9 +102,9 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="profile/index"
+        name="account/index"
         options={{
-          title: "Profile",
+          title: "Account",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}

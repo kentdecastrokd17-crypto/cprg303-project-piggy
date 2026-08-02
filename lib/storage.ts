@@ -19,25 +19,37 @@ export type Transaction = {
   note: string;
 };
 
-export async function saveTransaction(transaction: Transaction) {
+export const addTransaction = async (transaction: Transaction) => {
   try {
-    console.log("Saving transaction:", transaction);
+    const transactions = await getTransactions();
 
-    const storedTransactions = await AsyncStorage.getItem(TRANSACTIONS_KEY);
+    const updatedTransactions = [...transactions, transaction];
 
-    console.log("Existing storage:", storedTransactions);
-
-    const transactions: Transaction[] = storedTransactions
-      ? JSON.parse(storedTransactions)
-      : [];
-
-    transactions.push(transaction);
-
-    await AsyncStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
+    await AsyncStorage.setItem(
+      TRANSACTIONS_KEY,
+      JSON.stringify(updatedTransactions),
+    );
   } catch (error) {
-    console.error("Error saving transaction:", error);
+    console.error("Failed to add transaction:", error);
   }
-}
+};
+
+export const saveTransaction = async (transaction: Transaction) => {
+  try {
+    const transactions = await getTransactions();
+
+    const updatedTransactions = transactions.map((item) =>
+      item.id === transaction.id ? transaction : item,
+    );
+
+    await AsyncStorage.setItem(
+      TRANSACTIONS_KEY,
+      JSON.stringify(updatedTransactions),
+    );
+  } catch (error) {
+    console.error("Failed to update transaction:", error);
+  }
+};
 
 export async function getTransactions(): Promise<Transaction[]> {
   try {
