@@ -45,6 +45,8 @@ const FinancialHealth = () => {
     .reduce((total, transaction) => {
       return total + Math.abs(transaction.amount);
     }, 0);
+  //determine the financial score
+  //income over 2Xexpenses is 100, no income is 0. rest is Income/Expense * 50
   const financialScore = () => {
     if (threeMonthIncome === 0) {
       return 0;
@@ -54,8 +56,21 @@ const FinancialHealth = () => {
       return Math.round(50 * (threeMonthIncome / threeMonthExpense));
     }
   };
+  //determine score for use in card
   const score = financialScore();
-
+  //develop a message based on score
+  const financialMessage = () => {
+    if (score >= 85) {
+      return "Great - your finances are very healthy";
+    } else if (score >= 60) {
+      return "Good - spending is on track";
+    } else if (score >= 40) {
+      return "Okay - Determine necessary expenses";
+    } else {
+      return "Poor - review all finances";
+    }
+  };
+  const finMessage = financialMessage();
   return (
     <View style={styles.card}>
       <View style={styles.circleContainer}>
@@ -81,9 +96,7 @@ const FinancialHealth = () => {
         </View>
 
         <View style={styles.finHealthGradeContainer}>
-          <Text style={styles.finHealthText}>
-            Tracking your financial activity
-          </Text>
+          <Text style={styles.finHealthText}>{finMessage}</Text>
         </View>
       </View>
     </View>
@@ -100,11 +113,11 @@ const styles = StyleSheet.create({
     height: 120,
     flexDirection: "row",
     alignItems: "center",
+    borderRadius: 20,
   },
 
   circleContainer: {
-    marginLeft: 10,
-    marginRight: 20,
+    marginHorizontal: 10,
   },
 
   circleIcon: {
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
   finHealthContainer: {},
 
   finHealthText: {
-    fontSize: 16,
+    fontSize: 15,
     color: theme.colors.colorTextMuted,
   },
 
