@@ -60,3 +60,28 @@ export const goalSchema = z.object({
   ]),
 });
 export type GoalFormData = z.infer<typeof goalSchema>;
+
+//schema for account / profile form
+export const profileSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(50, "Name is over 50 character maximum"),
+
+  email: z
+    .string()
+    .email("Enter a valid email address")
+    .optional()
+    .or(z.literal("")),
+
+  monthlyBudgetGoal: z
+    .number({
+      message: "Amount must be a valid number",
+    })
+    .min(0, {
+      message: "Amount cannot be negative",
+    }),
+
+  notificationsEnabled: z.boolean(),
+});
+export type ProfileFormData = z.infer<typeof profileSchema>;

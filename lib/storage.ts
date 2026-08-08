@@ -184,3 +184,64 @@ export async function getGoalById(id: string): Promise<Goal | undefined> {
     return undefined;
   }
 }
+
+//Storage and functions for the account / profile
+const PROFILE_KEY = "profile";
+
+export type Profile = {
+  name: string;
+  email: string;
+  monthlyBudgetGoal: number;
+  notificationsEnabled: boolean;
+};
+
+export const DEFAULT_PROFILE: Profile = {
+  name: "Kent De Castro",
+  email: "",
+  monthlyBudgetGoal: 0,
+  notificationsEnabled: true,
+};
+
+export async function getProfile(): Promise<Profile> {
+  try {
+    const storedProfile = await AsyncStorage.getItem(PROFILE_KEY);
+
+    return storedProfile
+      ? { ...DEFAULT_PROFILE, ...JSON.parse(storedProfile) }
+      : DEFAULT_PROFILE;
+  } catch (error) {
+    console.error("Failed to get profile:", error);
+    return DEFAULT_PROFILE;
+  }
+}
+
+export const saveProfile = async (profile: Profile) => {
+  try {
+    await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  } catch (error) {
+    console.error("Failed to save profile:", error);
+  }
+};
+
+// Derives display initials from a profile's name, e.g. "Kent De Castro" -> "KD"
+export function getInitials(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+
+  if (words.length === 0) return "?";
+
+  const initials = words
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
+
+  return initials || "?";
+}
+
+// Clears all locally stored app data (transactions, goals, and profile)
+export async function clearAllData(): Promise<void> {
+  try {
+    await AsyncStorage.multiRemove([TRANSACTIONS_KEY, GOALS_KEY, PROFILE_KEY]);
+  } catch (error) {
+    console.error("Failed to clear app data:", error);
+  }
+}
